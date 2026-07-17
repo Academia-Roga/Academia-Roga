@@ -885,13 +885,11 @@ searchInput.addEventListener('input', (e) => {
 renderSidebar();
 renderGrid();
 
-/* ======================================================================
-   LOGIN (simulación) — ver nota en el <style> sobre por qué esto
-   no es seguridad real. Para cambiar el usuario/contraseña, edita
-   estas dos líneas:
-   ====================================================================== */
-const LOGIN_USUARIO = "admin";
-const LOGIN_CONTRASENA = "admin";
+/* =========================================================================
+   LOGIN REAL CON SUPABASE
+========================================================================= */
+const SUPABASE_URL = 'https://seyajhxihsqpjtehzuge.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_49Me2W5bmkhCxd_DNlDC7g_5DnfMCjX';
 
 const loginScreen = document.getElementById('loginScreen');
 const loginForm = document.getElementById('loginForm');
@@ -902,17 +900,31 @@ const loginLogo = document.getElementById('loginLogo');
 
 loginLogo.src = document.querySelector('.breadcrumb-logo').src;
 
-loginForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const okUser = loginUser.value.trim() === LOGIN_USUARIO;
-  const okPass = loginPass.value === LOGIN_CONTRASENA;
-  if (okUser && okPass){
-    loginScreen.style.display = 'none';
-  } else {
-    loginError.classList.add('show');
-    loginPass.value = '';
-    loginPass.focus();
-  }
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = loginUser.value.trim();
+    const password = loginPass.value;
+
+    // Conectar de forma segura a Supabase
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Verificar si el operador existe y su clave es correcta
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        // Si hay error, muestra el mensaje rojo que ya programó Claude
+        loginError.classList.add('show');
+        loginPass.value = '';
+        loginPass.focus();
+    } else {
+        // Si todo está bien, oculta la pantalla de login y da acceso
+        loginScreen.style.display = 'none';
+        loginError.classList.remove('show');
+    }
 });
 
 loginUser.focus();
