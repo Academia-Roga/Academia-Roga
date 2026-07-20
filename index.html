@@ -956,35 +956,57 @@ logoutBtn.addEventListener('click', () => {
   loginError.classList.remove('show');
   loginUser.focus();
 });
-  // ==========================================
-  // SISTEMA DE MEMORIA AVANZADO (PESTAÑA + VIDEO)
-  // ==========================================
-  
+ // ==========================================================
+  // SISTEMA DE MEMORIA AVANZADO + CONTROL DE PERFIL DE USUARIO
+  // ==========================================================
+
+  // Función para procesar el correo (Iniciales y Nombre)
+  function actualizarPerfilUsuario(email) {
+    if (!email) return;
+    sessionStorage.setItem('roga_user_email', email);
+
+    // Separamos la parte antes del @ (ej: miguel.morales)
+    const usuarioPartes = email.split('@')[0].split('.');
+    let nombre = usuarioPartes[0] || '';
+    let apellido = usuarioPartes[1] || '';
+
+    // Convertir la primera letra en Mayúscula
+    nombre = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+    apellido = apellido.charAt(0).toUpperCase() + apellido.slice(1);
+    const nombreCompleto = `${nombre} ${apellido}`.trim();
+
+    // Obtener las iniciales (ej: MM)
+    const iniciales = ((nombre.charAt(0) || '') + (apellido.charAt(0) || '')).toUpperCase();
+
+    // Reemplazar los textos en los tres elementos del HTML
+    const avatarEl = document.querySelector('.user-avatar');
+    const nameEl = document.querySelector('.user-name');
+    const dropdownLabelEl = document.querySelector('.user-dropdown-label');
+
+    if (avatarEl) avatarEl.innerText = iniciales;
+    if (nameEl) nameEl.innerText = nombreCompleto;
+    if (dropdownLabelEl) dropdownLabelEl.innerText = nombreCompleto;
+  }
+
   // 1. Monitorear y guardar el estado automáticamente cada segundo
   setInterval(() => {
-    // Guardar si la sesión está activa
     if (typeof loginScreen !== 'undefined' && loginScreen.style.display === 'none') {
       sessionStorage.setItem('roga_sesion_activa', 'true');
     }
     
-    // Guardar la pestaña del menú izquierdo que está activa
     const pestañaActiva = document.querySelector('.sidebar-item.active, [data-target].active, .tab.active');
     if (pestañaActiva) {
       const targetId = pestañaActiva.getAttribute('data-target') || pestañaActiva.innerText.trim();
       sessionStorage.setItem('roga_pestaña_actual', targetId);
     }
 
-    // DETECTAR SI HAY UN VIDEO ABIERTO:
-    // Verificamos si el reproductor de video (iframe o etiqueta video) está visible en la pantalla
     const videoEnPantalla = Array.from(document.querySelectorAll('iframe, video, .video-container, [class*="player"]'))
       .some(el => el.getBoundingClientRect().height > 50);
 
     if (videoEnPantalla) {
-      // Si el video está abierto, leemos el título principal que se muestra arriba (H1 o H2)
       const titulos = Array.from(document.querySelectorAll('h1, h2, [class*="title"]'));
       const tituloVideo = titulos.find(el => {
         const texto = el.innerText.trim();
-        // Descartamos los títulos del menú principal para no confundirse
         return texto && !texto.includes('Todas las') && !texto.includes('TEMAS') && texto.length > 3;
       });
 
@@ -992,12 +1014,11 @@ logoutBtn.addEventListener('click', () => {
         sessionStorage.setItem('roga_video_actual', tituloVideo.innerText.trim());
       }
     } else {
-      // Si el operador regresó al menú y ya no ve el video, borramos el video de la memoria
       sessionStorage.removeItem('roga_video_actual');
     }
   }, 1000);
 
-  // Guardar también de forma inmediata cuando el usuario hace clic en cualquier tarjeta
+  // Guardar también de forma inmediata cuando se hace clic en cualquier tarjeta
   document.addEventListener('click', (e) => {
     const tarjeta = e.target.closest('.card, [class*="card"], .video-item');
     if (tarjeta) {
@@ -1014,6 +1035,7 @@ logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem('roga_sesion_activa');
       sessionStorage.removeItem('roga_pestaña_actual');
       sessionStorage.removeItem('roga_video_actual');
+      sessionStorage.removeItem('roga_user_email');
     });
   }
 
@@ -1022,11 +1044,15 @@ logoutBtn.addEventListener('click', () => {
     const sesionGuardada = sessionStorage.getItem('roga_sesion_activa');
     const pestañaGuardada = sessionStorage.getItem('roga_pestaña_actual');
     const videoGuardado = sessionStorage.getItem('roga_video_actual');
+    const correoGuardado = sessionStorage.getItem('roga_user_email');
 
     if (sesionGuardada === 'true' && typeof loginScreen !== 'undefined') {
-      loginScreen.style.display = 'none'; // Saltarse el login
+      loginScreen.style.display = 'none';
       
-      // Primero abrimos la pestaña correcta
+      if (correoGuardado) {
+        actualizarPerfilUsuario(correoGuardado);
+      }
+      
       if (pestañaGuardada) {
         let botonMenu = document.querySelector(`[data-target="${pestañaGuardada}"]`);
         if (!botonMenu) {
@@ -1036,18 +1062,15 @@ logoutBtn.addEventListener('click', () => {
         if (botonMenu) botonMenu.click();
       }
 
-      // Segundo: Si había un video abierto, lo buscamos en el catálogo y lo abrimos solo
       if (videoGuardado) {
         setTimeout(() => {
-          // Buscamos elementos que coincidan con el nombre del video guardado
           const elementosVisibles = Array.from(document.querySelectorAll('.card, .card-title, h3, p, span'));
           const elementoVideo = elementosVisibles.find(el => el.innerText && el.innerText.trim().includes(videoGuardado));
-          
           if (elementoVideo) {
             const tarjetaParaDarClic = elementoVideo.closest('.card') || elementoVideo;
-            tarjetaParaDarClic.click(); // Clic automático para entrar al video
+            tarjetaParaDarClic.click();
           }
-        }, 400); // Pequeña pausa de 400 milisegundos para dar tiempo a que carguen las tarjetas
+        }, 400);
       }
     }
   });
