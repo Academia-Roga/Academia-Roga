@@ -924,6 +924,8 @@ loginForm.addEventListener('submit', async (e) => {
         // Si todo está bien, oculta la pantalla de login y da acceso
         loginScreen.style.display = 'none';
         loginError.classList.remove('show');
+       sessionStorage.setItem('roga_user_email', email);
+      actualizarPerfilUsuario(email);
     }
 });
 
