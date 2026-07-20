@@ -229,13 +229,13 @@ button{ font-family: inherit; }
 .app-shell{
   display:flex;
   align-items:flex-start;
-  max-width: 1360px;
-  margin: 0 auto;
+  width: 100%;
 }
+
 .sidebar{
-  width: 240px;
+  width: 200px; /* Reducido de 240px para quitar el exceso de espacio */
   flex-shrink: 0;
-  padding: 26px 16px 40px;
+  padding: 26px 12px 40px; /* Ajustado el espacio interno */
   position: sticky;
   top: 73px;
   height: calc(100vh - 73px);
