@@ -960,33 +960,36 @@ logoutBtn.addEventListener('click', () => {
   // SISTEMA DE MEMORIA AVANZADO + CONTROL DE PERFIL DE USUARIO
   // ==========================================================
 
-  // Función para procesar el correo (Iniciales y Nombre)
-  function actualizarPerfilUsuario(email) {
-    if (!email) return;
-    sessionStorage.setItem('roga_user_email', email);
+ // Función para procesar el correo (Iniciales y Nombre)
+function actualizarPerfilUsuario(email) {
+  if (!email) return;
+  sessionStorage.setItem('roga_user_email', email);
 
-    // Separamos la parte antes del @ (ej: miguel.morales)
-    const usuarioPartes = email.split('@')[0].split('.');
-    let nombre = usuarioPartes[0] || '';
-    let apellido = usuarioPartes[1] || '';
+  // Separamos la parte antes del @ (ej: miguel.morales)
+  const usuarioPartes = email.split('@')[0].split('.');
+  let nombre = usuarioPartes[0] || '';
+  let apellido = usuarioPartes[1] || '';
 
-    // Convertir la primera letra en Mayúscula
-    nombre = nombre.charAt(0).toUpperCase() + nombre.slice(1);
-    apellido = apellido.charAt(0).toUpperCase() + apellido.slice(1);
-    const nombreCompleto = `${nombre} ${apellido}`.trim();
+  // Convertir la primera letra en Mayúscula
+  nombre = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+  apellido = apellido.charAt(0).toUpperCase() + apellido.slice(1);
+  const nombreCompleto = `${nombre} ${apellido}`.trim();
 
-    // Obtener las iniciales (ej: MM)
-    const iniciales = ((nombre.charAt(0) || '') + (apellido.charAt(0) || '')).toUpperCase();
+  // Obtener las iniciales (ej: MM)
+  const inicialisando = (nombre.charAt(0) || '') + (apellido.charAt(0) || '');
+  const iniciales = inicialisando ? inicialisando.toUpperCase() : email.charAt(0).toUpperCase();
 
-    // Reemplazar los textos en los tres elementos del HTML
-    const avatarEl = document.querySelector('.user-avatar');
-    const nameEl = document.querySelector('.user-name');
-    const dropdownLabelEl = document.querySelector('.user-dropdown-label');
+  // Reemplazar de forma directa buscando las clases reales de tu botón
+  const avatarEl = document.querySelector('.user-avatar');
+  const nameEl = document.querySelector('.user-name');
+  
+  // Opcional por si tienes una etiqueta dentro del menú desplegable
+  const dropdownLabelEl = document.querySelector('.user-dropdown-label') || document.querySelector('[class*="dropdown-label"]');
 
-    if (avatarEl) avatarEl.innerText = iniciales;
-    if (nameEl) nameEl.innerText = nombreCompleto;
-    if (dropdownLabelEl) dropdownLabelEl.innerText = nombreCompleto;
-  }
+  if (avatarEl) avatarEl.innerText = iniciales;
+  if (nameEl) nameEl.innerText = nombreCompleto;
+  if (dropdownLabelEl) dropdownLabelEl.innerText = nombreCompleto;
+}
 
   // 1. Monitorear y guardar el estado automáticamente cada segundo
   setInterval(() => {
