@@ -956,56 +956,98 @@ logoutBtn.addEventListener('click', () => {
   loginError.classList.remove('show');
   loginUser.focus();
 });
-   // ==========================================
-  // SISTEMA DE MEMORIA PARA EVITAR REINICIOS (Cmd + R)
+  // ==========================================
+  // SISTEMA DE MEMORIA AVANZADO (PESTAÑA + VIDEO)
   // ==========================================
   
-  // 1. Guardar el estado automáticamente cada segundo
+  // 1. Monitorear y guardar el estado automáticamente cada segundo
   setInterval(() => {
-    // Si la pantalla de login está oculta, significa que el usuario ya ingresó
+    // Guardar si la sesión está activa
     if (typeof loginScreen !== 'undefined' && loginScreen.style.display === 'none') {
       sessionStorage.setItem('roga_sesion_activa', 'true');
     }
     
-    // Detectar qué tema o pestaña está activa en el menú
+    // Guardar la pestaña del menú izquierdo que está activa
     const pestañaActiva = document.querySelector('.sidebar-item.active, [data-target].active, .tab.active');
     if (pestañaActiva) {
-      // Guardamos el texto o el identificador de la pestaña donde se quedó
-      const targetId = pestañaActiva.getAttribute('data-target') || pestañaActiva.innerText;
+      const targetId = pestañaActiva.getAttribute('data-target') || pestañaActiva.innerText.trim();
       sessionStorage.setItem('roga_pestaña_actual', targetId);
+    }
+
+    // DETECTAR SI HAY UN VIDEO ABIERTO:
+    // Verificamos si el reproductor de video (iframe o etiqueta video) está visible en la pantalla
+    const videoEnPantalla = Array.from(document.querySelectorAll('iframe, video, .video-container, [class*="player"]'))
+      .some(el => el.getBoundingClientRect().height > 50);
+
+    if (videoEnPantalla) {
+      // Si el video está abierto, leemos el título principal que se muestra arriba (H1 o H2)
+      const titulos = Array.from(document.querySelectorAll('h1, h2, [class*="title"]'));
+      const tituloVideo = titulos.find(el => {
+        const texto = el.innerText.trim();
+        // Descartamos los títulos del menú principal para no confundirse
+        return texto && !texto.includes('Todas las') && !texto.includes('TEMAS') && texto.length > 3;
+      });
+
+      if (tituloVideo) {
+        sessionStorage.setItem('roga_video_actual', tituloVideo.innerText.trim());
+      }
+    } else {
+      // Si el operador regresó al menú y ya no ve el video, borramos el video de la memoria
+      sessionStorage.removeItem('roga_video_actual');
     }
   }, 1000);
 
-  // 2. Si el usuario decide cerrar sesión manual, borramos la memoria
+  // Guardar también de forma inmediata cuando el usuario hace clic en cualquier tarjeta
+  document.addEventListener('click', (e) => {
+    const tarjeta = e.target.closest('.card, [class*="card"], .video-item');
+    if (tarjeta) {
+      const textoTarjeta = tarjeta.querySelector('h3, .card-title, [class*="title"]')?.innerText || tarjeta.innerText;
+      if (textoTarjeta && textoTarjeta.length > 3) {
+        sessionStorage.setItem('roga_video_actual', textoTarjeta.trim());
+      }
+    }
+  });
+
+  // 2. Limpiar memoria si el usuario cierra sesión manualmente
   if (typeof logoutBtn !== 'undefined') {
     logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem('roga_sesion_activa');
       sessionStorage.removeItem('roga_pestaña_actual');
+      sessionStorage.removeItem('roga_video_actual');
     });
   }
 
-  // 3. Al recargar la página (Command + R), restaurar todo automáticamente
+  // 3. Al restaurar la página con Command + R:
   window.addEventListener('load', () => {
     const sesionGuardada = sessionStorage.getItem('roga_sesion_activa');
     const pestañaGuardada = sessionStorage.getItem('roga_pestaña_actual');
+    const videoGuardado = sessionStorage.getItem('roga_video_actual');
 
     if (sesionGuardada === 'true' && typeof loginScreen !== 'undefined') {
-      // Ocultamos el login de inmediato para que no pida contraseña otra vez
-      loginScreen.style.display = 'none';
+      loginScreen.style.display = 'none'; // Saltarse el login
       
-      // Buscamos la pestaña donde estaba y le damos un clic automático
+      // Primero abrimos la pestaña correcta
       if (pestañaGuardada) {
-        let elementoParaDarClic = document.querySelector(`[data-target="${pestañaGuardada}"]`);
-        
-        // Si no la encuentra por atributo, la busca por el texto del menú
-        if (!elementoParaDarClic) {
-          elementoParaDarClic = Array.from(document.querySelectorAll('.sidebar-item, .tab'))
-            .find(el => el.innerText === pestañaGuardada);
+        let botonMenu = document.querySelector(`[data-target="${pestañaGuardada}"]`);
+        if (!botonMenu) {
+          botonMenu = Array.from(document.querySelectorAll('.sidebar-item, .tab'))
+            .find(el => el.innerText.trim() === pestañaGuardada.trim());
         }
-        
-        if (elementoParaDarClic) {
-          setTimeout(() => elementoParaDarClic.click(), 200); // Da el clic para abrir su video o tema
-        }
+        if (botonMenu) botonMenu.click();
+      }
+
+      // Segundo: Si había un video abierto, lo buscamos en el catálogo y lo abrimos solo
+      if (videoGuardado) {
+        setTimeout(() => {
+          // Buscamos elementos que coincidan con el nombre del video guardado
+          const elementosVisibles = Array.from(document.querySelectorAll('.card, .card-title, h3, p, span'));
+          const elementoVideo = elementosVisibles.find(el => el.innerText && el.innerText.trim().includes(videoGuardado));
+          
+          if (elementoVideo) {
+            const tarjetaParaDarClic = elementoVideo.closest('.card') || elementoVideo;
+            tarjetaParaDarClic.click(); // Clic automático para entrar al video
+          }
+        }, 400); // Pequeña pausa de 400 milisegundos para dar tiempo a que carguen las tarjetas
       }
     }
   });
