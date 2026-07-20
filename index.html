@@ -956,6 +956,59 @@ logoutBtn.addEventListener('click', () => {
   loginError.classList.remove('show');
   loginUser.focus();
 });
+   // ==========================================
+  // SISTEMA DE MEMORIA PARA EVITAR REINICIOS (Cmd + R)
+  // ==========================================
+  
+  // 1. Guardar el estado automáticamente cada segundo
+  setInterval(() => {
+    // Si la pantalla de login está oculta, significa que el usuario ya ingresó
+    if (typeof loginScreen !== 'undefined' && loginScreen.style.display === 'none') {
+      sessionStorage.setItem('roga_sesion_activa', 'true');
+    }
+    
+    // Detectar qué tema o pestaña está activa en el menú
+    const pestañaActiva = document.querySelector('.sidebar-item.active, [data-target].active, .tab.active');
+    if (pestañaActiva) {
+      // Guardamos el texto o el identificador de la pestaña donde se quedó
+      const targetId = pestañaActiva.getAttribute('data-target') || pestañaActiva.innerText;
+      sessionStorage.setItem('roga_pestaña_actual', targetId);
+    }
+  }, 1000);
+
+  // 2. Si el usuario decide cerrar sesión manual, borramos la memoria
+  if (typeof logoutBtn !== 'undefined') {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('roga_sesion_activa');
+      sessionStorage.removeItem('roga_pestaña_actual');
+    });
+  }
+
+  // 3. Al recargar la página (Command + R), restaurar todo automáticamente
+  window.addEventListener('load', () => {
+    const sesionGuardada = sessionStorage.getItem('roga_sesion_activa');
+    const pestañaGuardada = sessionStorage.getItem('roga_pestaña_actual');
+
+    if (sesionGuardada === 'true' && typeof loginScreen !== 'undefined') {
+      // Ocultamos el login de inmediato para que no pida contraseña otra vez
+      loginScreen.style.display = 'none';
+      
+      // Buscamos la pestaña donde estaba y le damos un clic automático
+      if (pestañaGuardada) {
+        let elementoParaDarClic = document.querySelector(`[data-target="${pestañaGuardada}"]`);
+        
+        // Si no la encuentra por atributo, la busca por el texto del menú
+        if (!elementoParaDarClic) {
+          elementoParaDarClic = Array.from(document.querySelectorAll('.sidebar-item, .tab'))
+            .find(el => el.innerText === pestañaGuardada);
+        }
+        
+        if (elementoParaDarClic) {
+          setTimeout(() => elementoParaDarClic.click(), 200); // Da el clic para abrir su video o tema
+        }
+      }
+    }
+  });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
