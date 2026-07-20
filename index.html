@@ -529,6 +529,10 @@ main{ flex:1; min-width:0; padding: 30px 36px 70px; }
 body, html {
     overflow-x: hidden; /* Esto evita el movimiento lateral molesto */
     width: 100%;
+   /* Esto evita el zoom automático de Safari en iPhones */
+input, textarea, select {
+    font-size: 16px !important;
+}
 }
 
 /* Asegura que cualquier imagen se adapte al ancho de la pantalla */
