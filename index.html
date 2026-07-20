@@ -525,6 +525,17 @@ main{ flex:1; min-width:0; padding: 30px 36px 70px; }
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; scroll-behavior:auto !important; }
 }
+   /* Corrector de desbordamiento para móviles */
+body, html {
+    overflow-x: hidden; /* Esto evita el movimiento lateral molesto */
+    width: 100%;
+}
+
+/* Asegura que cualquier imagen se adapte al ancho de la pantalla */
+img {
+    max-width: 100%;
+    height: auto;
+}
 </style>
 </head>
 <body>
