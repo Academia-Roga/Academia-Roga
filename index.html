@@ -616,7 +616,311 @@ img {
     </form>
   </div>
 </div>
+<!-- Estructura del Panel de Administración -->
+<div id="admin-dashboard" class="admin-wrapper" style="display: none;">
+    <!-- Menú Lateral Estilo WordPress / Roga -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-badge">ROGA</span>
+            <h3>Academia Admin</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="cambiarVistaAdmin('dashboard')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Dashboard
+            </a>
+            <a href="#" class="nav-item" onclick="cambiarVistaAdmin('cursos')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Capacitaciones
+            </a>
+            <a href="#" class="nav-item" onclick="cambiarVistaAdmin('usuarios')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                Usuarios y Roles
+            </a>
+            <a href="#" class="nav-item" onclick="cambiarVistaAdmin('maquinas')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Máquinas y Piezas
+            </a>
+            <a href="#" class="nav-item" onclick="cerrarSesionAdmin()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Cerrar Sesión
+            </a>
+        </nav>
+    </aside>
 
+    <!-- Barra Superior -->
+        <header class="admin-topbar">
+            <div class="topbar-title">
+                <h2>Panel de Control</h2>
+                <p>Gestión general de contenidos y operadores</p>
+            </div>
+            <div class="topbar-user" style="display: flex; align-items: center; gap: 16px;">
+                <button class="roga-btn-outline" onclick="irAVistaCursos()" style="width: auto; padding: 8px 14px; font-size: 12px;">
+                    Ver Cursos (Vista Operador)
+                </button>
+                <span class="user-email-tag" id="admin-email-display">admin@roga.com</span>
+                <div class="user-avatar-circle" id="admin-avatar-initials">RA</div>
+            </div>
+        </header>
+
+        <!-- Grilla de Tarjetas de Administración -->
+        <section class="admin-grid">
+            <div class="admin-card">
+                <div class="card-icon red">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                </div>
+                <div class="card-body">
+                    <h3>Nuevo Curso</h3>
+                    <p>Sube manuales, videos y material interactivo para las líneas de producción.</p>
+                    <button class="roga-btn" onclick="abrirModalNuevoCurso()">Crear Contenido</button>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <div class="card-icon gray">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </div>
+                <div class="card-body">
+                    <h3>Control de Operadores</h3>
+                    <p>Verifica el progreso de capacitación y los módulos completados por el personal.</p>
+                    <button class="roga-btn-outline" onclick="verProgresoUsuarios()">Ver Reportes</button>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <div class="card-icon gray">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+                <div class="card-body">
+                    <h3>Módulos Flexografía</h3>
+                    <p>Administra secciones técnicas enfocadas en anilox, suajes y componentes clave.</p>
+                    <button class="roga-btn-outline" onclick="gestionarModulos()">Administrar</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<style>
+    /* Estilos adaptados al diseño corporativo de Roga Academia */
+    :root {
+        --roga-red: #B20E10;
+        --roga-gray: #969696;
+        --roga-border: #CCCCCC;
+        --roga-bg: #F9F9F9;
+        --card-bg: #FFFFFF;
+        --radius-lg: 16px;
+        --radius-sm: 8px;
+    }
+
+    .admin-wrapper {
+        display: flex;
+        min-height: 100vh;
+        background-color: var(--roga-bg);
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #111;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+        width: 260px;
+        background-color: var(--card-bg);
+        border-right: 1px solid var(--roga-border);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-brand {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid var(--roga-border);
+    }
+
+    .brand-badge {
+        background-color: var(--roga-red);
+        color: #fff;
+        padding: 4px 8px;
+        font-weight: bold;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+    }
+
+    .sidebar-brand h3 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .sidebar-nav {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        color: #444;
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+        background-color: rgba(178, 14, 16, 0.08);
+        color: var(--roga-red);
+    }
+
+    /* Main Content */
+    .admin-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .admin-topbar {
+        background-color: var(--card-bg);
+        padding: 20px 32px;
+        border-bottom: 1px solid var(--roga-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .topbar-title h2 {
+        margin: 0 0 4px 0;
+        font-size: 20px;
+    }
+
+    .topbar-title p {
+        margin: 0;
+        color: var(--roga-gray);
+        font-size: 13px;
+    }
+
+    .topbar-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-email-tag {
+        font-size: 13px;
+        color: var(--roga-gray);
+    }
+
+    .user-avatar-circle {
+        width: 38px;
+        height: 38px;
+        background-color: var(--roga-red);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    /* Grid & Cards */
+    .admin-grid {
+        padding: 32px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .admin-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--roga-border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .admin-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .card-icon.red {
+        background-color: rgba(178, 14, 16, 0.1);
+        color: var(--roga-red);
+    }
+
+    .card-icon.gray {
+        background-color: rgba(150, 150, 150, 0.1);
+        color: var(--roga-gray);
+    }
+
+    .card-body h3 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+    }
+
+    .card-body p {
+        margin: 0 0 20px 0;
+        font-size: 13px;
+        color: var(--roga-gray);
+        line-height: 1.4;
+    }
+
+    /* Buttons */
+    .roga-btn {
+        background-color: var(--roga-red);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.2s;
+    }
+
+    .roga-btn:hover {
+        opacity: 0.9;
+    }
+
+    .roga-btn-outline {
+        background-color: transparent;
+        color: #111;
+        border: 1px solid var(--roga-border);
+        padding: 10px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: border-color 0.2s;
+    }
+
+    .roga-btn-outline:hover {
+        border-color: var(--roga-red);
+        color: var(--roga-red);
+    }
+</style>
 <div class="topbar">
   <div class="breadcrumb" id="breadcrumb">
     
@@ -1191,5 +1495,76 @@ function actualizarPerfilUsuario(email) {
   });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    (async () => {
+        // 1. Después de que el usuario inicia sesión exitosamente o al cargar la página:
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+            // 2. Consultamos la tabla 'profiles' para saber su rol
+            const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .single();
+
+            if (profile) {
+                if (profile.role === 'admin') {
+                    // AQUÍ PONES LA ACCIÓN PARA EL ADMINISTRADOR
+                    console.log("Bienvenido Administrador");
+                    mostrarPanelAdmin(); // Función que muestra las vistas de gestión
+                } else {
+                    // AQUÍ PONES LA ACCIÓN PARA EL OPERADOR
+                    console.log("Bienvenido Operador");
+                    mostrarVistaCapacitaciones(); // Función que muestra solo los cursos
+                }
+            }
+        }
+    }) ();
+    
+    // Pega tus funciones aquí para que sean globales y funcionen con los botones:
+    function irAVistaCursos() {
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const vistaCursosContainer = document.getElementById('vista-cursos'); 
+
+        if (adminDashboard) adminDashboard.style.display = 'none';
+        if (vistaCursosContainer) vistaCursosContainer.style.display = 'block';
+        
+        mostrarBotonVolverAdmin();
+    }
+
+    function volverAlAdmin() {
+        const adminDashboard = document.getElementById('admin-dashboard');
+        if (adminDashboard) adminDashboard.style.display = 'flex';
+        
+        const vistaCursosContainer = document.getElementById('vista-cursos');
+        if (vistaCursosContainer) vistaCursosContainer.style.display = 'none';
+    }
+
+    function mostrarBotonVolverAdmin() {
+        if (document.getElementById('btn-flotante-admin')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'btn-flotante-admin';
+        btn.innerText = 'Volver al Panel Admin';
+        btn.onclick = volverAlAdmin;
+        btn.style.cssText = `
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #B20E10;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+        `;
+        document.body.appendChild(btn);
+    }
+</script> <!-- Línea 1524 -->
 </body>
 </html>
