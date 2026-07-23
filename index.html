@@ -654,13 +654,29 @@ img {
                 <h2>Panel de Control</h2>
                 <p>Gestión general de contenidos y operadores</p>
             </div>
-            <div class="topbar-user" style="display: flex; align-items: center; gap: 16px;">
-                <button class="roga-btn-outline" onclick="irAVistaCursos()" style="width: auto; padding: 8px 14px; font-size: 12px;">
-                    Ver Cursos (Vista Operador)
-                </button>
-                <span class="user-email-tag" id="admin-email-display">admin@roga.com</span>
-                <div class="user-avatar-circle" id="admin-avatar-initials">RA</div>
-            </div>
+           <div class="topbar-user" style="display: flex; align-items: center; gap: 16px;">
+  <button class="roga-btn-outline" onclick="cambiarAVista('cursos')" style="width: auto; padding: 8px 14px; font-size: 12px;">
+    Ver Cursos (Vista Operador)
+  </button>
+  <span class="user-email-tag" id="admin-email-display">admin@roga.com</span>
+  
+  <!-- Contenedor del avatar con el menú desplegable -->
+  <div style="position: relative;">
+    <div class="user-avatar-circle" id="admin-avatar-initials" onclick="toggleDropdown()" style="cursor: pointer;">RA</div>
+    
+    <!-- Menú desplegable -->
+    <div class="user-dropdown" id="userDropdown" style="position: absolute; right: 0; top: 40px; display: none;">
+      <div class="user-dropdown-label">admin@roga.com</div>
+      <button class="user-dropdown-item" onclick="cambiarAVista('cursos')">
+        Ver Cursos
+      </button>
+      <div style="height:1px; background:var(--line); margin:4px 0;"></div>
+      <button class="user-dropdown-item danger" onclick="cerrarSesion()">
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>
         </header>
 
         <!-- Grilla de Tarjetas de Administración -->
@@ -1582,6 +1598,55 @@ function mostrarVistaCapacitaciones() {
     if (loginScreen) loginScreen.style.display = 'none';
     if (adminDashboard) adminDashboard.style.display = 'none';
 }
+  // 1. Correos autorizados para ver el Panel de Administración
+  const ADMINS_PERMITIDOS = ["admin@roga.com", "capacitacion@roga.com"];
+
+  // 2. Función para abrir o cerrar el menú del avatar
+  function toggleDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+  }
+
+  // 3. Cerrar el menú si el usuario hace clic fuera de él
+  window.onclick = function(event) {
+    if (!event.target.closest('.user-avatar-circle') && !event.target.closest('#userDropdown')) {
+      const dropdown = document.getElementById('userDropdown');
+      if (dropdown && dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+      }
+    }
+  };
+
+  // 4. Función complementaria para alternar vistas con el menú
+  function cambiarAVista(vista) {
+    if (vista === 'admin') {
+      mostrarPanelAdmin();
+    } else {
+      mostrarVistaCapacitaciones();
+    }
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.style.display = 'none';
+  }
+
+  // 5. Validar permisos al iniciar sesión
+  function validarPermisosAdmin(emailUsuario) {
+    const menuAdminBtn = document.getElementById('menuAdminBtn');
+    if (menuAdminBtn) {
+      if (ADMINS_PERMITIDOS.includes(emailUsuario)) {
+        menuAdminBtn.style.display = 'flex';
+      } else {
+        menuAdminBtn.style.display = 'none';
+      }
+    }
+  }
+
+  // 6. Función de cerrar sesión
+  function cerrarSesion() {
+    localStorage.clear();
+    location.reload();
+  }
 </script> <!-- Línea 1524 -->
 </body>
 </html>
