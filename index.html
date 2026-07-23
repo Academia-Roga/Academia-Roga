@@ -1565,6 +1565,23 @@ function actualizarPerfilUsuario(email) {
         `;
         document.body.appendChild(btn);
     }
+  // Función para mostrar el Panel de Administrador
+function mostrarPanelAdmin() {
+    const loginScreen = document.getElementById('loginScreen');
+    const adminDashboard = document.getElementById('admin-dashboard');
+    
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (adminDashboard) adminDashboard.style.display = 'flex';
+}
+
+// Función para mostrar la vista de operador / capacitaciones
+function mostrarVistaCapacitaciones() {
+    const loginScreen = document.getElementById('loginScreen');
+    const adminDashboard = document.getElementById('admin-dashboard');
+    
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (adminDashboard) adminDashboard.style.display = 'none';
+}
 </script> <!-- Línea 1524 -->
 </body>
 </html>
