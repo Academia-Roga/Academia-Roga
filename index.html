@@ -1648,5 +1648,73 @@ function mostrarVistaCapacitaciones() {
     location.reload();
   }
 </script> <!-- Línea 1524 -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginScreen = document.getElementById('loginScreen');
+    const adminDashboard = document.getElementById('admin-dashboard');
+    const loginError = document.getElementById('loginError');
+
+    // Manejar el envío del formulario de acceso
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const usuarioInput = document.getElementById('loginUser').value.trim();
+      const passwordInput = document.getElementById('loginPass').value.trim();
+
+      // Credenciales de prueba (puedes cambiarlas aquí si lo deseas)
+      if (usuarioInput === 'admin' && passwordInput === 'admin') {
+        loginError.classList.remove('show');
+        loginScreen.style.display = 'none';
+        adminDashboard.style.display = 'flex';
+      } else {
+        loginError.classList.add('show');
+      }
+    });
+  });
+
+  // Funciones de navegación entre vistas
+  function cambiarVistaAdmin(vista) {
+    console.log('Cambiando a vista de admin:', vista);
+    // Aquí puedes agregar la lógica para alternar secciones del admin si es necesario
+  }
+
+  function cambiarAVista(vista) {
+    if (vista === 'cursos') {
+      document.getElementById('admin-dashboard').style.display = 'none';
+      // Aquí puedes mostrar la vista principal de cursos de operador
+    }
+  }
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+  }
+
+  function cerrarSesion() {
+    document.getElementById('admin-dashboard').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+  }
+
+  function cerrarSesionAdmin() {
+    cerrarSesion();
+  }
+
+  function abrirModalNuevoCurso() {
+    alert('Función para crear nuevo contenido próximamente.');
+  }
+
+  function verProgresoUsuarios() {
+    alert('Función de reportes de operadores próximamente.');
+  }
+
+  function gestionarModulos() {
+    alert('Función de módulos de flexografía próximamente.');
+  }
+</script>
 </body>
 </html>
