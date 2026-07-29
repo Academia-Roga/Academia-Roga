@@ -1717,17 +1717,17 @@ async function checkMasterUserAccess() {
     const { data: { user } } = await supabaseClient.auth.getUser();
     
     if (!user || user.email !== CUENTA_MAESTRA_EMAIL) {
-      if (btnOpenUserModal) {
-        btnOpenUserModal.style.display = 'none';
+      if (seccionCrearUsuarioMaster) {
+        seccionCrearUsuarioMaster.style.display = 'none';
       }
     } else {
-      if (btnOpenUserModal) {
-        btnOpenUserModal.style.display = 'flex';
+      if (seccionCrearUsuarioMaster) {
+        seccionCrearUsuarioMaster.style.display = 'flex';
       }
     }
   } catch (err) {
     console.error('Error al verificar sesión maestra:', err);
-    if (btnOpenUserModal) btnOpenUserModal.style.display = 'none';
+    if (seccionCrearUsuarioMaster) seccionCrearUsuarioMaster.style.display = 'none';
   }
 }
 
