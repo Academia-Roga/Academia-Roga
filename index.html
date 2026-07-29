@@ -1730,7 +1730,7 @@ async function checkMasterUserAccess() {
     if (seccionCrearUsuarioMaster) seccionCrearUsuarioMaster.style.display = 'none';
   }
 }
-
+checkMasterUserAccess();
 // Controladores para abrir y cerrar el modal
 if (btnOpenUserModal) {
   btnOpenUserModal.addEventListener('click', () => {
