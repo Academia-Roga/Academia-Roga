@@ -2664,6 +2664,23 @@ if (formNuevaCapacitacionEl){
     cambiarVistaAdmin('cursos');
   });
 }
+  document.addEventListener('DOMContentLoaded', () => {
+  const btnOpen = document.getElementById('btnOpenUserModal');
+  const btnClose = document.getElementById('btnCloseUserModal');
+  const userModal = document.getElementById('userModal');
+
+  if (btnOpen && userModal) {
+    btnOpen.addEventListener('click', () => {
+      userModal.classList.remove('hidden');
+    });
+  }
+
+  if (btnClose && userModal) {
+    btnClose.addEventListener('click', () => {
+      userModal.classList.add('hidden');
+    });
+  }
+});
 </script>
 </body>
 </html>
