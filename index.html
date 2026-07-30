@@ -2527,7 +2527,7 @@ async function restablecerContrasenaDirecto(id, email){
    Supabase abajo.
    ========================================================================= */
 const CREATE_USER_FUNCTION_URL = ''; // <-- pega aquí la URL de tu Edge Function "create-user"
-const DELETE_USER_FUNCTION_URL = ''; // <-- pega aquí la URL de tu Edge Function "delete-user"
+const DELETE_USER_FUNCTION_URL = 'https://seyajhxihsqpjtehzuge.supabase.co/functions/v1/delete-user';
 
 function poblarModalNuevoUsuario(){
   const form = document.getElementById('formNuevoUsuario');
