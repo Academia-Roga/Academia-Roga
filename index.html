@@ -413,6 +413,11 @@ main{ flex:1; min-width:0; padding: 30px 36px 70px; }
   gap: 30px;
   align-items:start;
 }
+/* Sin esto, los elementos de un grid nunca se encogen más allá del ancho
+   de su contenido (título largo, reproductor, etc.), así que en celulares
+   angostos toda la página se volvía más ancha que la pantalla: se veía
+   "cortada" y sin poder desplazarse para ver el resto. */
+.lesson-layout > div{ min-width: 0; }
 .lesson-eyebrow{ font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); margin-bottom:8px; }
 .lesson-title{ font-size: 28px; font-weight:800; letter-spacing:-0.01em; margin:0 0 14px; line-height:1.25; }
 .lesson-badges{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
@@ -602,14 +607,14 @@ main{ flex:1; min-width:0; padding: 30px 36px 70px; }
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; scroll-behavior:auto !important; }
 }
-   /* Corrector de desbordamiento para móviles */
+/* Corrector de desbordamiento para móviles */
 body, html {
     overflow-x: hidden; /* Esto evita el movimiento lateral molesto */
     width: 100%;
-   /* Esto evita el zoom automático de Safari en iPhones */
+}
+/* Esto evita el zoom automático de Safari en iPhones */
 input, textarea, select {
     font-size: 16px !important;
-}
 }
 
 /* Asegura que cualquier imagen se adapte al ancho de la pantalla */
