@@ -1006,6 +1006,10 @@ html[data-theme="dark"] .modal-overlay.modal-fullscreen{ background:var(--surfac
 .modal-overlay.modal-fullscreen .modal-head{ max-width:760px; margin:0 auto 20px; }
 .modal-overlay.modal-fullscreen #teContenido{ max-width:760px; margin:0 auto; }
 .examen-pregunta-card{ border:1px solid var(--roga-border,#2a2a2a); border-radius:12px; padding:14px; margin-bottom:14px; }
+@media (max-width: 480px){
+  .modal-overlay.modal-fullscreen .modal-card{ padding:18px 14px; }
+  .examen-pregunta-card{ padding:12px; }
+}
 .examen-opcion-row{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
 .examen-opcion-row input[type="radio"]{ flex:0 0 auto; width:16px; height:16px; padding:0; margin:0; accent-color:var(--roga-red,#B20E10); }
 .examen-opcion-row input[type="text"]{ flex:1 1 auto; width:auto; min-width:0; }
