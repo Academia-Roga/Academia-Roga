@@ -1166,6 +1166,8 @@ html[data-theme="dark"] .modal-overlay.modal-fullscreen{ background:var(--surfac
     /* Main Content */
     .admin-content {
         flex: 1;
+        min-width: 0; /* evita que una tabla ancha (u otro contenido) empuje
+                         todo el panel más ancho que la pantalla en mobile */
         display: flex;
         flex-direction: column;
     }
@@ -2930,6 +2932,7 @@ function renderAdminDashboardHTML(){
     <div class="dashboard-section">
       <p class="dashboard-col-title">Actividad reciente — avance por operador</p>
       <div class="activity-card">
+        <div style="overflow-x:auto;">
         <table class="activity-table">
           <thead>
             <tr>
@@ -2944,6 +2947,7 @@ function renderAdminDashboardHTML(){
             <tr><td colspan="5" class="activity-empty">Cargando actividad reciente…</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -3154,6 +3158,7 @@ async function cargarKpiYActividadDesdeProgreso(){
             </tr>
             <tr class="activity-detail-row" id="detalleOperador-${i}" style="display:none;">
               <td colspan="5">
+                <div style="overflow-x:auto;">
                 <table class="activity-subtable">
                   <thead>
                     <tr>
@@ -3164,6 +3169,7 @@ async function cargarKpiYActividadDesdeProgreso(){
                   </thead>
                   <tbody>${filasDetalle}</tbody>
                 </table>
+                </div>
               </td>
             </tr>`;
         }).join('');
