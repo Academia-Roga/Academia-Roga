@@ -3401,7 +3401,7 @@ function aplicarVisibilidadNavPorRol(){
   if (linkTemas) linkTemas.style.display = esSupervisor ? 'none' : '';
   if (btnExcel) btnExcel.style.display = esSupervisor ? 'none' : '';
   if (btnExcelMovil) btnExcelMovil.style.display = esSupervisor ? 'none' : '';
-  if (marca) marca.textContent = esSupervisor ? 'Academia Supervisor' : 'Academia Admin';
+  if (marca) marca.textContent = esSupervisor ? 'Academia' : 'Academia';
   if (tituloTopbar) tituloTopbar.textContent = esSupervisor ? 'Panel del Supervisor' : 'Panel de Control';
   if (subTopbar) subTopbar.textContent = esSupervisor
     ? ('Área(s) a tu cargo: ' + nombresAreas(miAreas))
