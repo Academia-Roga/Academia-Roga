@@ -1,4 +1,4 @@
-## tranquilo ya viene ⌛
+## Cargando actualización ⌛
 
 <!--
 **Academia-Roga/Academia-Roga** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
