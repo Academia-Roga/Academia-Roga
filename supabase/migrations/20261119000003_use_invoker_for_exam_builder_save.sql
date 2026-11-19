@@ -1,0 +1,1 @@
+alter function public.guardar_examen_modular(uuid,jsonb,jsonb,uuid[]) security invoker;
