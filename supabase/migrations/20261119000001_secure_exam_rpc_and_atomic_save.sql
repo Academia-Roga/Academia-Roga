@@ -1,4 +1,4 @@
--- Permisos acotados para RPC de exámenes y guardado atómico del constructor.
+-- RPC de exámenes modulares, seguridad de funciones y guardado atómico.
 
 revoke all on function public._normalizar_texto(text) from public, anon, authenticated;
 
@@ -147,12 +147,10 @@ begin
     elsif v_p.tipo='relacionar' then
       v_count:=jsonb_array_length(coalesce(v_p.config_jsonb->'pairs','[]'::jsonb)); v_correct:=0;
       if v_count>0 and jsonb_typeof(v_answer)='object' then
-        v_idx:=0;
-        for v_item in select value from jsonb_array_elements(v_p.config_jsonb->'pairs') loop
+        for v_idx in 0..(v_count-1) loop
           if public._normalizar_texto(v_answer->>v_idx::text)=public._normalizar_texto(v_item->>'right') then
             v_correct:=v_correct+1;
           end if;
-          v_idx:=v_idx+1;
         end loop;
         v_score:=v_score+(v_pts*v_correct::numeric/v_count::numeric);
       end if;
@@ -204,7 +202,6 @@ $function$
 CREATE OR REPLACE FUNCTION public.guardar_examen_modular(p_examen_id uuid, p_examen jsonb, p_preguntas jsonb, p_destinatarios uuid[] DEFAULT '{}'::uuid[])
  RETURNS uuid
  LANGUAGE plpgsql
- SECURITY DEFINER
  SET search_path TO ''
 AS $function$
 declare v_user uuid; v_role text; v_id uuid; v_q jsonb; v_n integer:=0;
